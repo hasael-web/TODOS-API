@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
+  IsOptional,
   IsString,
   Validate,
   ValidationArguments,
@@ -57,17 +58,21 @@ export class CreateBoardDto {
 }
 
 export class UpdateBoardDto {
+  @IsOptional()
   @IsString()
   title?: string;
 
+  @IsOptional()
   @ApiProperty({
     example: '2024-06-09',
     description: 'Start date of the board',
     type: String,
   })
+  @IsOptional()
   @Validate(IsValidDateConstraint)
   end_date?: Date;
 
+  @IsOptional()
   @Validate(IsValidDateConstraint)
   start_date?: Date;
 }
