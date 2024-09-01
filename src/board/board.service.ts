@@ -125,6 +125,19 @@ export class BoardService {
   }
   async deleteBoard(id: string): Promise<any> {
     try {
+      const findBoard = await this.prismaService.board.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      if (!findBoard) {
+        return {
+          statusCode: HttpStatus.NOT_FOUND,
+          message: 'Board not found',
+        };
+      }
+
       await this.prismaService.board.delete({
         where: {
           id,

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateTaskDto {
   @ApiProperty({
@@ -33,7 +33,7 @@ export class CreateTaskDto {
 }
 
 export class UpdateTaskDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   name?: string;
 
@@ -42,7 +42,7 @@ export class UpdateTaskDto {
     type: Number,
     required: true,
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   progress_percentage?: number;
 }

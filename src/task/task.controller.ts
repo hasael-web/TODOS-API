@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
@@ -21,9 +22,9 @@ export class TaskController {
 
   @UseGuards(AuthGuard)
   @Get('/')
-  async getTasks() {
+  async getTasks(@Request() req) {
     try {
-      return this.taskService.getTasks();
+      return this.taskService.getTasks(req.user.id);
     } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -91,7 +92,9 @@ export class TaskController {
   @Post('/move')
   async moveTask(@Body() data: { id: string; board_id: string }) {
     try {
-      return this.taskService.moveTask(data.id, data.board_id);
+      const taskMove = await this.taskService.moveTask(data.id, data.board_id);
+
+      return taskMove;
     } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,

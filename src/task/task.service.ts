@@ -34,9 +34,18 @@ export class TaskService {
     }
   }
 
-  async getTasks(): Promise<any> {
+  async getTasks(user_id: string): Promise<any> {
     try {
-      const tasks = await this.prismaService.task.findMany();
+      const tasks = await this.prismaService.task.findMany({
+        where: {
+          board: {
+            user_id,
+          },
+        },
+        include: {
+          board: true,
+        },
+      });
 
       return {
         statusCode: HttpStatus.OK,
@@ -102,6 +111,29 @@ export class TaskService {
 
   async moveTask(id: string, boardId: string): Promise<any> {
     try {
+      const findTask = await this.prismaService.task.findUnique({
+        where: {
+          id,
+        },
+      });
+      const findBoard = await this.prismaService.board.findUnique({
+        where: {
+          id: boardId,
+        },
+      });
+      if (!findTask) {
+        return {
+          statusCode: HttpStatus.NOT_FOUND,
+          message: 'Task  not found',
+        };
+      }
+      if (!findBoard) {
+        return {
+          statusCode: HttpStatus.NOT_FOUND,
+          message: 'Board not found',
+        };
+      }
+
       const task = await this.prismaService.task.update({
         where: {
           id,
@@ -126,6 +158,18 @@ export class TaskService {
 
   async deleteTask(id: string): Promise<any> {
     try {
+      const findTask = await this.prismaService.task.findUnique({
+        where: {
+          id,
+        },
+      });
+      if (!findTask) {
+        return {
+          statusCode: HttpStatus.NOT_FOUND,
+          message: 'Task not found',
+        };
+      }
+
       await this.prismaService.task.delete({
         where: {
           id,
