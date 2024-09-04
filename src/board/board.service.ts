@@ -60,7 +60,7 @@ export class BoardService {
         data: {
           title: data.title,
           start_date: new Date(data.start_date),
-          end_date: new Date(data.start_date),
+          end_date: new Date(data.end_date),
           user_id: user_id,
         },
       });
@@ -137,7 +137,6 @@ export class BoardService {
           message: 'Board not found',
         };
       }
-
       await this.prismaService.board.delete({
         where: {
           id,

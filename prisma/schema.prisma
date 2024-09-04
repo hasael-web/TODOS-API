@@ -22,7 +22,7 @@ model board {
   start_date DateTime
   end_date   DateTime
   task       task[]
-  user       user      @relation(fields: [user_id], references: [id])
+  user       user      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id    String
   created_at DateTime  @default(now()) @db.Timestamptz()
   updated_at DateTime?
@@ -32,7 +32,7 @@ model task {
   id                  String    @id @default(uuid())
   name                String
   progress_percentage Int       @default(0)
-  board               board     @relation(fields: [board_id], references: [id])
+  board               board     @relation(fields: [board_id], references: [id], onDelete: Cascade)
   board_id            String
   created_at          DateTime  @default(now()) @db.Timestamptz()
   updated_at          DateTime?
